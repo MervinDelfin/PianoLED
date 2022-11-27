@@ -1,3 +1,5 @@
+README.md may be outdated, more fucntions were added to the projet
+
 # PianoLED
 Control an LED strip with MIDI messages on an Arduino.
 
