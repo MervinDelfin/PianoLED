@@ -1,4 +1,4 @@
-README.md may be outdated, more fucntions were added to the projet
+README.md may be outdated, more functions were added to the project
 
 # PianoLED
 Control an LED strip with MIDI messages on an Arduino.
