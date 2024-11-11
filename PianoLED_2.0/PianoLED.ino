@@ -8,7 +8,9 @@
 
 // Added custom MIDI protocol in 2024 by Marvin Ruciński
 
+// #include <MIDI_lib/MIDI.h>
 #include <MIDI.h>
+// #define FASTLED_ESP8266_RAW_PIN_ORDER
 #include "FastLED.h"
 
 #include <ESP8266WiFi.h>
@@ -41,7 +43,7 @@ FASTLED_USING_NAMESPACE
 #define button_pin 5
 #define POTENTIOMETER_PIN A0
 
-#define DATA_PIN 2
+#define DATA_PIN 4
 #define LED_TYPE WS2812B
 #define COLOR_ORDER GRB
 #define NUM_LEDS 88
@@ -388,6 +390,7 @@ void OnControlChangeWIFI(byte channel, byte number, byte value)
 
 void setup()
 {
+  Serial.begin(9600);
   delay(2000); // Safety delay
 
   connectToWiFi();
@@ -417,10 +420,11 @@ void setup()
   pinMode(dtPin, INPUT_PULLUP);
   pinMode(btnPin, INPUT_PULLUP);
 
-  // fill_solid( leds, NUM_LEDS, CRGB::White);
-  // FastLED.show();
+  // test leds by filling them with solid white
+  fill_solid( leds, NUM_LEDS, CRGB::White);
+  FastLED.show();
 
-  fill_rainbow(rainbowPalette, NUM_LEDS, gHue, 3);
+  // fill_rainbow(rainbowPalette, NUM_LEDS, gHue, 3);
 }
 
 void connectToMidiSession()
@@ -485,24 +489,26 @@ void encoderChange(int oldB)
 
 void connectToWiFi()
 {
-  wifiMulti.addAP("Dom", "Internet2014$"); // add Wi-Fi networks you want to connect to
-  // Serial.print("Connecting to WiFi...");
+  // add Wi-Fi networks you want to connect to
+  // wifiMulti.addAP("Dom", "Internet2014$"); 
+  wifiMulti.addAP("404NetworkNotFound", "bezspacjizmalychliter$"); 
+  Serial.print("Connecting to WiFi...");
   int i = 0;
   while (wifiMulti.run() != WL_CONNECTED)
   { // Wait for the Wi-Fi to connect
     delay(250);
-    // Serial.print('.');
+    Serial.print('.');
   }
-  // Serial.println('\n');
-  // Serial.print("Connected to ");
-  // Serial.println(WiFi.SSID());              // Tell us what network we're connected to
-  // Serial.print("IP address:\t");
-  // Serial.println(WiFi.localIP());           // Send the IP address of the ESP8266 to the computer
+  Serial.println('\n');
+  Serial.print("Connected to ");
+  Serial.println(WiFi.SSID());              // Tell us what network we're connected to
+  Serial.print("IP address:\t");
+  Serial.println(WiFi.localIP());           // Send the IP address of the ESP8266 to the computer
 }
 void setUpOTA()
 {
   ArduinoOTA.setHostname("ESP8266");
-  // ArduinoOTA.setPassword("esp8266");
+  ArduinoOTA.setPassword("esp8266");
 
   ArduinoOTA.onStart([]()
                      {
